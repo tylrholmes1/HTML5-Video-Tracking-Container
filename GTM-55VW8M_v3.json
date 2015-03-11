@@ -1,0 +1,287 @@
+{
+    "exportFormatVersion": 1.3,
+    "exportTime": "2015-03-11 16:51:04",
+    "containerVersion": {
+        "accountId": "30449707",
+        "containerId": "1088432",
+        "containerVersionId": "0",
+        "deleted": false,
+        "container": {
+            "accountId": "30449707",
+            "containerId": "1088432",
+            "name": "HTML5 Only",
+            "publicId": "GTM-55VW8M",
+            "timeZoneCountryId": "US",
+            "timeZoneId": "America/Los_Angeles",
+            "notes": "",
+            "usageContext": [
+                "WEB"
+            ],
+            "fingerprint": "1426092655718",
+            "enabledBuiltInVariable": [
+                "CLICK_TARGET",
+                "HISTORY_SOURCE",
+                "PAGE_URL",
+                "CLICK_ID",
+                "CLICK_ELEMENT",
+                "PAGE_HOSTNAME",
+                "OLD_HISTORY_STATE",
+                "PAGE_PATH",
+                "CLICK_CLASSES",
+                "FORM_TARGET",
+                "NEW_HISTORY_FRAGMENT",
+                "FORM_ID",
+                "CLICK_URL",
+                "EVENT",
+                "FORM_URL",
+                "FORM_TEXT",
+                "CLICK_TEXT",
+                "REFERRER",
+                "FORM_CLASSES",
+                "OLD_HISTORY_FRAGMENT",
+                "FORM_ELEMENT",
+                "NEW_HISTORY_STATE"
+            ]
+        },
+        "tag": [
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "tagId": "7",
+                "name": "HTML5 Video Event",
+                "type": "ua",
+                "liveOnly": false,
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableEcommerce",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "useDebugVersion",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "doubleClick",
+                        "value": "true"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "trackingId",
+                        "value": "{{Fake UA}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "trackType",
+                        "value": "TRACK_EVENT"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "nonInteraction",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventLabel",
+                        "value": "{{HTML5 Video Label}}"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "enableLinkId",
+                        "value": "false"
+                    },
+                    {
+                        "type": "BOOLEAN",
+                        "key": "anonymizeIp",
+                        "value": "false"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventCategory",
+                        "value": "{{HTML5 Video Category}}"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "eventAction",
+                        "value": "{{HTML5 Video Action}}"
+                    }
+                ],
+                "fingerprint": "0",
+                "firingTriggerId": [
+                    "7"
+                ]
+            },
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "tagId": "8",
+                "name": "HTML5 Video Script",
+                "type": "html",
+                "liveOnly": false,
+                "parameter": [
+                    {
+                        "type": "BOOLEAN",
+                        "key": "supportDocumentWrite",
+                        "value": "true"
+                    },
+                    {
+                        "type": "TEMPLATE",
+                        "key": "html",
+                        "value": "<script>\n// Let's wrap everything inside a function so variables are not defined as globals  \n(function(){  \n    // This is gonna our percent buckets ( 25%-75% )\n    //Change the variable \"divisor\" to create different multiples to track smaller %'s like 10% etc.\n    var divisor = 25;  \n    // We're going to save our players status on this object.  \n    var videos_status = {};  \n    // This is the funcion that is gonna handle the event sent by the player listeners  \n    function eventHandler(e){   \n      switch(e.type) {  \n          // This event type is sent everytime the player updated it's current time,  \n          // We're using for the % of the video played.     \n        case 'timeupdate':      \n          // Let's set the save the current player's video time in our status object              \n          videos_status[e.target.id].current = Math.round(e.target.currentTime);     \n          // We just want to send the percent events once     \n          var pct = Math.floor(100 * videos_status[e.target.id].current / e.target.duration);            \n          for (var j in videos_status[e.target.id]._progress_markers) {\n            if (pct >= j && j > videos_status[e.target.id].greatest_marker) {\n    \t\t\tvideos_status[e.target.id].greatest_marker = j;\n            }\n          }\n         // current bucket hasn't been already sent to GA?, let's push it to GTM\n         if (videos_status[e.target.id].greatest_marker && !videos_status[e.target.id]._progress_markers[videos_status[e.target.id].greatest_marker]) {\n             videos_status[e.target.id]._progress_markers[videos_status[e.target.id].greatest_marker] = true;\n             dataLayer.push({\n                 'event': 'gaEvent',\n                 'gaEventCategory': 'HTML5 Video',\n                 'gaEventAction': 'Progress_' + videos_status[e.target.id].greatest_marker + '%', \n                 // We are using sanitizing the current video src string, and getting just the video name part\n                 'gaEventLabel': decodeURIComponent(e.target.currentSrc.split('/')[e.target.currentSrc.split('/').length - 1])\n             });\n        }\n\n    break;\n    // This event is fired when user's click on the play button\n    case 'play':\n        dataLayer.push({\n            'event': 'gaEvent',\n            'gaEventCategory': 'HTML5 Video',\n            'gaEventAction': 'Play',\n            'gaEventLabel': decodeURIComponent(e.target.currentSrc.split('/')[e.target.currentSrc.split('/').length - 1])\n        });\n\n        break;\n        // This event is fied when user's click on the pause button\n    case 'pause':\n        dataLayer.push({\n            'event': 'gaEvent',\n            'gaEventCategory': 'HTML5 Video',\n            'gaEventAction': 'Pause',\n            'gaEventLabel': decodeURIComponent(e.target.currentSrc.split('/')[e.target.currentSrc.split('/').length - 1]),\n            'gaEventValue': videos_status[e.target.id].current\n        });\n        break;\n        // If the user ends playing the video, an Finish video will be pushed ( This equals to % played = 100 )  \n    case 'ended':\n        dataLayer.push({\n            'event': 'gaEvent',\n            'gaEventCategory': 'HTML5 Video',\n            'gaEventAction': 'Finished',\n            'gaEventLabel': decodeURIComponent(e.target.currentSrc.split('/')[e.target.currentSrc.split('/').length - 1])\n        });\n        break;\n    default:\n        break;\n        }\n\n     }\n        // We need to configure the listeners\n        // Let's grab all the the \"video\" objects on the current page     \n        var videos = document.getElementsByTagName('video');\n        for (var i = 0; i < videos.length; i++) {\n            // In order to have some id to reference in our status object, we are adding an id to the video objects\n            // that don't have an id attribute. \n            var videoTagId;\n            if (!videos[i].getAttribute('id')) {\n                // Generate a random alphanumeric string to use is as the id\n                videoTagId = 'html5_video_' + Math.random().toString(36).slice(2);\n                videos[i].setAttribute('id', videoTagId);\n            }\n            // Current video has alredy a id attribute, then let's use it :)\n            else {\n                videoTagId = videos[i].getAttribute('id');\n            }\n\n            // Video Status Object declaration  \n            videos_status[videoTagId] = {};\n            // We'll save the highest percent mark played by the user in the current video.\n            videos_status[videoTagId].greatest_marker = 0;\n            // Let's set the progress markers, so we can know afterwards which ones have been already sent.\n            videos_status[videoTagId]._progress_markers = {};\n\n            for (j = 0; j < 100; j++) {\n                videos_status[videoTagId].progress_point = divisor * Math.floor(j / divisor);\n                videos_status[videoTagId]._progress_markers[videos_status[videoTagId].progress_point] = false;\n            } \n            // On page DOM, all players currentTime is 0     \n            videos_status[videoTagId].current = 0;      \n            // Now we're setting the event listeners.     \n            videos[i].addEventListener(\"play\", eventHandler, false);     \n            videos[i].addEventListener(\"pause\", eventHandler, false);     \n            videos[i].addEventListener(\"ended\", eventHandler, false);     \n            videos[i].addEventListener(\"timeupdate\", eventHandler, false);     \n            videos[i].addEventListener(\"ended\", eventHandler, false);\n         } \n})();\n</script>"
+                    }
+                ],
+                "fingerprint": "0",
+                "firingTriggerId": [
+                    "8"
+                ]
+            }
+        ],
+        "fingerprint": "0",
+        "trigger": [
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "triggerId": "7",
+                "name": "HTML5 Video Action",
+                "type": "CUSTOM_EVENT",
+                "customEventFilter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{_event}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "gaEvent"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "0"
+            },
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "triggerId": "8",
+                "name": "HTML5 Video Loaded",
+                "type": "DOM_READY",
+                "filter": [
+                    {
+                        "type": "EQUALS",
+                        "parameter": [
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg0",
+                                "value": "{{is HTML5 Video Present}}"
+                            },
+                            {
+                                "type": "TEMPLATE",
+                                "key": "arg1",
+                                "value": "true"
+                            }
+                        ]
+                    }
+                ],
+                "fingerprint": "0"
+            }
+        ],
+        "variable": [
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "variableId": "16",
+                "name": "Fake UA",
+                "type": "c",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "value",
+                        "value": "X"
+                    }
+                ],
+                "fingerprint": "0"
+            },
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "variableId": "17",
+                "name": "HTML5 Video Action",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "gaEventAction"
+                    },
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    }
+                ],
+                "fingerprint": "0"
+            },
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "variableId": "18",
+                "name": "HTML5 Video Category",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "gaEventCategory"
+                    },
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    }
+                ],
+                "fingerprint": "0"
+            },
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "variableId": "19",
+                "name": "HTML5 Video Label",
+                "type": "v",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "name",
+                        "value": "gaEventLabel"
+                    },
+                    {
+                        "type": "INTEGER",
+                        "key": "dataLayerVersion",
+                        "value": "2"
+                    }
+                ],
+                "fingerprint": "0"
+            },
+            {
+                "accountId": "30449707",
+                "containerId": "1088432",
+                "variableId": "13",
+                "name": "is HTML5 Video Present",
+                "type": "jsm",
+                "parameter": [
+                    {
+                        "type": "TEMPLATE",
+                        "key": "javascript",
+                        "value": "function () {\n    var video = document.getElementsByTagName(\"video\").length;\n    if (video > 0) {\n        return \"true\";\n    }\n}"
+                    }
+                ],
+                "fingerprint": "0"
+            }
+        ]
+    }
+}
